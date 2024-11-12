@@ -1,0 +1,301 @@
+---
+title: "TP 03: Trend Analysis"
+subtitle: "Group 05"
+authors: 
+  - "NANG Sreynich"
+  - "NOEM Koemhak"
+  - "NGIM Panha"
+  - "OUN Vikreth"
+format:
+  revealjs:
+    slide-number: true
+    css: "style.css"
+---
+
+## Problem 3.5
+
+<p>
+
+The data file `wages` contains monthly values of the average hourly wages (in dollars) for workers in the U.S. apparel and textile products industry for July 1981 through June 1987.
+
+a)  Display and interpret the time series plot for these data.
+
+b)  Use least squares to fit a linear time trend to this time series. Interpret the regression output. Save the standardized residuals from the fit for further analysis.
+
+c)  Construct and interpret the time series plot of the standardized residuals from part (b).
+
+d)  Use least squares to fit a quadratic time trend to the wages time series. Interpret the regression output. Save the standardized residuals from the fit for further analysis.
+
+e)  Construct and interpret the time series plot of the standardized residuals from part (d).
+
+</p>
+
+## Load libraries and wages dataset
+
+``` r
+library(TSA)
+library(ggplot2)
+options(repr.plot.width = 16, repr.plot.height = 6)
+data(wages)
+wages
+```
+
+```{r}
+library(TSA)
+library(ggplot2)
+options(repr.plot.width = 16, repr.plot.height = 6)
+data(wages)
+wages
+```
+
+## 
+
+a\) Display and interpret the time series plot for these data.
+
+``` r
+plot(wages, type = "o", ylab = "Wages", main = "Time Series Plot of Wages")
+```
+
+```{r}
+plot(wages, type = "o", ylab = "Wages", main = "Time Series Plot of Wages")
+```
+
+## 
+
+b)  Use least squares to fit a linear time trend to this time series. Interpret the regression output. Save the standardized residuals from the fit for further analysis.
+
+``` r
+# Define the time variable
+time_var_wages <- time(wages)
+
+# Fit the linear time trend model
+linear_model_wages <- lm(wages ~ time_var_wages)
+
+# Display the summary of the model
+summary(linear_model_wages)
+
+# Save the standardized residuals
+linear_residuals_wages <- rstandard(linear_model_wages)
+```
+
+## Output:
+
+```{r}
+# Define the time variable
+time_var_wages <- time(wages)
+
+# Fit the linear time trend model
+linear_model_wages <- lm(wages ~ time_var_wages)
+
+# Display the summary of the model
+summary(linear_model_wages)
+
+# Save the standardized residuals
+linear_residuals_wages <- rstandard(linear_model_wages)
+```
+
+## 
+
+c)  Construct and interpret the time series plot of the standardized residuals from part (b).
+
+``` r
+# Plot the sequence of standardized residuals from the linear model of wages
+plot(y = linear_residuals_wages, x = time_var_wages, type = "o",
+     ylab = "Standardized Residuals", xlab = "Time",
+     main = "Standardized Residuals of Linear Trend Model for Wages")
+abline(h = 0, col = "red", lty = 2)
+```
+
+```{r}
+# Plot the sequence of standardized residuals from the linear model of wages
+plot(y = linear_residuals_wages, x = time_var_wages, type = "o",
+     ylab = "Standardized Residuals", xlab = "Time",
+     main = "Standardized Residuals of Linear Trend Model for Wages")
+abline(h = 0, col = "red", lty = 2)
+
+```
+
+## 
+
+d)  Use least squares to fit a quadratic time trend to the wages time series. Interpret the regression output. Save the standardized residuals from the fit for further analysis.
+
+``` r
+# Fit the quadratic time trend model
+quadratic_model_wages <- lm(wages ~ time_var_wages + I(time_var_wages^2))
+
+# Display the summary of the model
+summary(quadratic_model_wages)
+
+# Save the standardized residuals
+quadratic_residuals_wages <- rstandard(quadratic_model_wages)
+```
+
+```{r}
+# Fit the quadratic time trend model
+quadratic_model_wages <- lm(wages ~ time_var_wages + I(time_var_wages^2))
+
+# Display the summary of the model
+summary(quadratic_model_wages)
+
+# Save the standardized residuals
+quadratic_residuals_wages <- rstandard(quadratic_model_wages)
+```
+
+## 
+
+e)  Construct and interpret the time series plot of the standardized residuals from part (d).
+
+``` r
+# Plot the sequence of standardized residuals from the quadratic model of wages
+plot(y = quadratic_residuals_wages, x = time_var_wages,
+     type = "o", pch = 20, col = "blue",
+     ylab = "Standardized Residuals",
+     main = "Standardized Residuals of Quadratic Trend Model for Wages")
+
+# Add a horizontal line at y = 0 for reference
+abline(h = 0, col = "red", lty = 2)
+```
+
+```{r}
+# Plot the sequence of standardized residuals from the quadratic model of wages
+plot(y = quadratic_residuals_wages, x = time_var_wages,
+     type = "o", pch = 20, col = "blue",
+     ylab = "Standardized Residuals",
+     main = "Standardized Residuals of Quadratic Trend Model for Wages")
+
+# Add a horizontal line at y = 0 for reference
+abline(h = 0, col = "red", lty = 2)
+```
+
+```{r}
+data(prescrip)
+# Calculate month-to-month percentage changes
+prescrip_pct_change <- diff(prescrip) / lag(prescrip, -1) * 100
+# Define the time variable
+time_var <- time(prescrip_pct_change)
+
+# Fit the cosine trend model
+cosine_model <- lm(prescrip_pct_change ~ cos(2 * pi * time_var / 12))
+
+# Display the summary of the model
+summary(cosine_model)
+
+# Save the standardized residuals
+cosine_residuals <- rstandard(cosine_model)
+```
+
+## Problem: 3.15
+
+<p>
+
+(Continuation of Exercise 3.9) Consider again the prescrip time series.
+
+a)  Save the standardized residuals from a least squares fit of a cosine trend with fundamental frequency 1/12 to the percentage change time series.
+
+b)  Perform a runs test on the standardized residuals and interpret the results.
+
+c)  Calculate and interpret the sample autocorrelations for the standardized residuals.
+
+d)  Investigate the normality of the standardized residuals (error terms). Consider histograms and normal probability plots. Interpret the plots.
+
+</p>
+
+## 
+
+a)  Save the standardized residuals from a least squares fit of a cosine trend with fundamental frequency 1/12 to the percentage change time series
+
+$$
+\text{prescrip_pct_change} = \beta_0 + \beta_1 \cos\left(\frac{2 \pi \cdot \text{time_var}}{12}\right) + \epsilon
+$$
+
+``` r
+# Fit the cosine trend model with fundamental frequency 1/12
+cosine_model_1_12 <- lm(prescrip_pct_change ~ cos(2 * pi * time_var / 12))
+
+# Save the standardized residuals
+cosine_residuals_1_12 <- rstandard(cosine_model_1_12)
+cosine_residuals_1_12
+```
+
+```{r}
+# Fit the cosine trend model with fundamental frequency 1/12
+cosine_model_1_12 <- lm(prescrip_pct_change ~ cos(2 * pi * time_var / 12))
+
+# Save the standardized residuals
+cosine_residuals_1_12 <- rstandard(cosine_model_1_12)
+head(cosine_residuals_1_12)
+```
+
+## 
+
+b)  Perform a runs test on the standardized residuals and interpret the results.
+
+``` r
+# Load the tseries package
+library(tseries)
+
+# Convert the residuals to a factor indicating above/below median
+residuals_factor <- factor(cosine_residuals_1_12 > median(cosine_residuals_1_12))
+
+# Perform a runs test on the standardized residuals
+runs_test_result <- runs.test(residuals_factor)
+
+# Display the results of the runs test
+print(runs_test_result)
+```
+
+```{r}
+# Load the tseries package
+library(tseries)
+
+# Convert the residuals to a factor indicating above/below median
+residuals_factor <- factor(cosine_residuals_1_12 > median(cosine_residuals_1_12))
+
+# Perform a runs test on the standardized residuals
+runs_test_result <- runs.test(residuals_factor)
+
+# Display the results of the runs test
+print(runs_test_result)
+```
+
+## 
+
+c)  Calculate and interpret the sample autocorrelations for the standardized residuals.
+
+``` r
+# Calculate the sample autocorrelations for the standardized residuals
+acf_residuals <- acf(cosine_residuals_1_12, main = "Sample Autocorrelations of Standardized Residuals")
+
+# Display the autocorrelation values
+print(acf_residuals)
+```
+
+```{r}
+# Calculate the sample autocorrelations for the standardized residuals
+acf_residuals <- acf(cosine_residuals_1_12, main = "Sample Autocorrelations of Standardized Residuals")
+
+# Display the autocorrelation values
+print(acf_residuals)
+```
+
+## 
+
+d)  Investigate the normality of the standardized residuals (error terms). Consider histograms and normal probability plots. Interpret the plots.
+
+``` r
+# Histogram of the standardized residuals
+hist(cosine_residuals_1_12, breaks = 20, main = "Histogram of Standardized Residuals", xlab = "Standardized Residuals", col = "lightblue")
+
+# Normal probability plot (Q-Q plot) of the standardized residuals
+qqnorm(cosine_residuals_1_12, main = "Normal Q-Q Plot of Standardized Residuals")
+qqline(cosine_residuals_1_12, col = "red")
+```
+
+```{r}
+# Histogram of the standardized residuals
+hist(cosine_residuals_1_12, breaks = 20, main = "Histogram of Standardized Residuals", xlab = "Standardized Residuals", col = "lightblue")
+
+# Normal probability plot (Q-Q plot) of the standardized residuals
+qqnorm(cosine_residuals_1_12, main = "Normal Q-Q Plot of Standardized Residuals")
+qqline(cosine_residuals_1_12, col = "red")
+```

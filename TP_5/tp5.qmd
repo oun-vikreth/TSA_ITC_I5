@@ -1,0 +1,543 @@
+---
+title: "TP 5: Models For Nonstationary Time Series"
+author:
+  - "**Group 05:**"
+  - "- NANG Sreynich"
+  - "- NEOM Koemhak"
+  - "- OUN Vikteth"
+format: html
+editor: visual
+---
+
+### Ex 5.1
+
+Identify the following as specific ARIMA models. That is, what are p,d, and q and what are the values of the parameters (the $\phi$’s and $\theta$’s)?
+
+a). $Y_t = Y_{t-1} - 0.25 Y_{t-2} + e_t - 0.1 e_{t-1}$
+
+b). $Y_t = 2 Y_{t-1} - Y_{t-2} + e_t$
+
+c). $Y_t = 0.5 Y_{t-2} + e_t + 0.25 e_{t-2}$
+
+## Solution
+
+### Part (a)
+
+Given: $$
+Y_t = Y_{t-1} - 0.25 Y_{t-2} + e_t - 0.1 e_{t-1}
+$$
+
+**Analysis**:
+
+-   This model has AR terms and MA terms but no differencing, so $d = 0$.
+-   **AR terms**:
+    -   Coefficient of $Y_{t-1}$: $\phi_1 = 1$
+    -   Coefficient of $Y_{t-2}$: $\phi_2 = -0.25$
+    -   Therefore, $p = 2$.
+-   **MA terms**:
+    -   Coefficient of $e_{t-1}$: $\theta_1 = -0.1$
+    -   Therefore, $q = 1$.
+
+**Conclusion**:\
+The model is an **ARIMA(2, 0, 1)** with: - $\phi_1 = 1$, $\phi_2 = -0.25$ - $\theta_1 = -0.1$
+
+------------------------------------------------------------------------
+
+### Part (b)
+
+Given: $$
+Y_t = 2 Y_{t-1} - Y_{t-2} + e_t
+$$
+
+**Analysis**:
+
+-   This model has AR terms but no MA terms and no differencing, so $d = 0$.
+-   **AR terms**:
+    -   Coefficient of $Y_{t-1}$: $\phi_1 = 2$
+    -   Coefficient of $Y_{t-2}$: $\phi_2 = -1$
+    -   Therefore, $p = 2$.
+-   **MA terms**:
+    -   None, so $q = 0$.
+
+**Conclusion**:\
+The model is an **ARIMA(2, 0, 0)** with: - $\phi_1 = 2$, $\phi_2 = -1$
+
+------------------------------------------------------------------------
+
+### Part (c)
+
+Given: $$
+Y_t = 0.5 Y_{t-2} + e_t + 0.25 e_{t-2}
+$$
+
+**Analysis**:
+
+-   This model has AR and MA terms but no differencing, so $d = 0$.
+-   **AR terms**:
+    -   Coefficient of $Y_{t-2}$: $\phi_2 = 0.5$
+    -   No $Y_{t-1}$ term, so $\phi_1 = 0$
+    -   Therefore, $p = 2$ (since $\phi_2 \neq 0$).
+-   **MA terms**:
+    -   Coefficient of $e_{t-2}$: $\theta_2 = 0.25$
+    -   No $e_{t-1}$ term, so $\theta_1 = 0$
+    -   Therefore, $q = 2$.
+
+**Conclusion**:\
+The model is an **ARIMA(2, 0, 2)** with: - $\phi_1 = 0$, $\phi_2 = 0.5$ - $\theta_1 = 0$, $\theta_2 = 0.25$
+
+------------------------------------------------------------------------
+
+### Summary
+
+| Model | ARIMA(p, d, q) | $\phi$'s | $\theta$'s |
+|------------------|------------------|-------------------|-------------------|
+| \(a\) | ARIMA(2, 0, 1) | $\phi_1 = 1$, $\phi_2 = -0.25$ | $\theta_1 = -0.1$ |
+| \(b\) | ARIMA(2, 0, 0) | $\phi_1 = 2$, $\phi_2 = -1$ | None |
+| \(c\) | ARIMA(2, 0, 2) | $\phi_1 = 0$, $\phi_2 = 0.5$ | $\theta_1 = 0$, $\theta_2 = 0.25$ |
+
+---
+title: "ARIMA Model Expectations and Variances"
+format: html
+---
+
+### **Ex 5.2**
+
+For each of the ARIMA models below, calculate the values for $E(\nabla Y_t)$ and $\text{Var}(\nabla Y_t)$.
+
+1.  $Y_t = 3 + Y_{t-1} + e_t - 0.75 e_{t-1}$
+2.  $Y_t = 10 + 1.25 Y_{t-1} - 0.25 Y_{t-2} + e_t - 0.5 e_{t-1} + 0.25 e_{t-2}$
+3.  $Y_t = 5 + 2 Y_{t-1} - 1.7 Y_{t-2} + 0.7 Y_{t-3} + e_t - 0.5 e_{t-1} + 0.25 e_{t-2}$
+
+## Solution
+
+### Part (a)
+
+Given: $$
+Y_t = 3 + Y_{t-1} + e_t - 0.75 e_{t-1}
+$$
+
+#### **First Difference**:
+
+The first difference is: $$
+\nabla Y_t = Y_t - Y_{t-1}
+$$
+
+Substitute the expression for $Y_t$ and $Y_{t-1$:
+
+$$
+\nabla Y_t = (3 + Y_{t-1} + e_t - 0.75 e_{t-1}) - (3 + Y_{t-2} + e_{t-1} - 0.75 e_{t-2})
+$$ Simplify: $$
+\nabla Y_t = Y_{t-1} - Y_{t-2} + e_t - 0.75 e_{t-1} - e_{t-1} + 0.75 e_{t-2}
+$$ Thus, the difference becomes: $$
+\nabla Y_t = Y_{t-1} - Y_{t-2} + e_t - 1.75 e_{t-1} + 0.75 e_{t-2}
+$$
+
+#### **Expectation**:
+
+Since $E(e_t) = 0$, we get: $$
+E(\nabla Y_t) = E(Y_{t-1} - Y_{t-2}) + 0 = 0
+$$ Therefore, $$
+E(\nabla Y_t) = 0
+$$
+
+#### **Variance**:
+
+The variance of $\nabla Y_t$ is based on the error terms:
+
+$$
+\text{Var}(\nabla Y_t) = \text{Var}(e_t - 1.75 e_{t-1} + 0.75 e_{t-2})
+$$
+
+Assuming the errors $e_t$ are independent with variance $\sigma^2$, we get:
+
+$$
+\text{Var}(\nabla Y_t) = \sigma^2 (1^2 + (-1.75)^2 + 0.75^2)
+$$ Calculate: $$
+\text{Var}(\nabla Y_t) = \sigma^2 (1 + 3.0625 + 0.5625) = \sigma^2 \times 4.625
+$$
+
+Therefore: $$
+\text{Var}(\nabla Y_t) = 4.625 \sigma^2
+$$
+
+------------------------------------------------------------------------
+
+### Part (b)
+
+Given: $$
+Y_t = 10 + 1.25 Y_{t-1} - 0.25 Y_{t-2} + e_t - 0.5 e_{t-1} + 0.25 e_{t-2}
+$$
+
+#### **First Difference**:
+
+The first difference is: $$
+\nabla Y_t = Y_t - Y_{t-1}
+$$ Substitute the expression for$Y_t$ and $Y_{t-1}$: $$
+\nabla Y_t = (10 + 1.25 Y_{t-1} - 0.25 Y_{t-2} + e_t - 0.5 e_{t-1} + 0.25 e_{t-2}) - (10 + 1.25 Y_{t-2} - 0.25 Y_{t-3} + e_{t-1} - 0.5 e_{t-2} + 0.25 e_{t-3})
+$$ Simplify: $$
+\nabla Y_t = 1.25 (Y_{t-1} - Y_{t-2}) + e_t - 0.5 e_{t-1} + 0.25 e_{t-2} - e_{t-1} + 0.5 e_{t-2}
+$$ Thus: $$
+\nabla Y_t = 1.25 (Y_{t-1} - Y_{t-2}) + e_t - 1.5 e_{t-1} + 0.75 e_{t-2}
+$$
+
+#### **Expectation**:
+
+Since $E(e_t) = 0$, we get: $$
+E(\nabla Y_t) = 0
+$$
+
+#### **Variance**:
+
+Assuming the errors $e_t$ have variance $\sigma^2$, we calculate:
+
+$$
+\text{Var}(\nabla Y_t) = \sigma^2 (1^2 + (-1.5)^2 + 0.75^2) = \sigma^2 (1 + 2.25 + 0.5625)
+$$ Therefore: $$
+\text{Var}(\nabla Y_t) = \sigma^2 \times 3.8125
+$$
+
+------------------------------------------------------------------------
+
+### Part (c)
+
+Given: $$
+Y_t = 5 + 2 Y_{t-1} - 1.7 Y_{t-2} + 0.7 Y_{t-3} + e_t - 0.5 e_{t-1} + 0.25 e_{t-2}
+$$
+
+#### **First Difference**:
+
+The first difference is: $$
+\nabla Y_t = Y_t - Y_{t-1}
+$$ Substitute the expression for $Y_t$ and $Y_{t-1}$:
+
+$$
+\nabla Y_t = (5 + 2 Y_{t-1} - 1.7 Y_{t-2} + 0.7 Y_{t-3} + e_t - 0.5 e_{t-1} + 0.25 e_{t-2}) - (5 + 2 Y_{t-2} - 1.7 Y_{t-3} + 0.7 Y_{t-4} + e_{t-1} - 0.5 e_{t-2} + 0.25 e_{t-3})
+$$ Simplify: $$
+\nabla Y_t = 2 (Y_{t-1} - Y_{t-2}) - 1.7 (Y_{t-2} - Y_{t-3}) + 0.7 (Y_{t-3} - Y_{t-4}) + e_t - e_{t-1} + 0.25 (e_{t-2} - e_{t-3})
+$$
+
+#### **Expectation**:
+
+Since $E(e_t) = 0$, we get:
+
+$$
+E(\nabla Y_t) = 0
+$$
+
+#### **Variance**:
+
+Again, assuming the errors have variance $\sigma^2$, we calculate:
+
+$$
+\text{Var}(\nabla Y_t) = \sigma^2 (1^2 + (-1)^2 + 0.25^2)
+$$ Thus: $$
+\text{Var}(\nabla Y_t) = \sigma^2 \times (1 + 1 + 0.0625) = \sigma^2 \times 2.0625
+$$
+
+------------------------------------------------------------------------
+
+### Summary
+
+| Model | $E(\nabla Y_t)$ | $\text{Var}(\nabla Y_t)$ |
+|-------|-----------------|--------------------------|
+| \(a\) | 0               | $4.625 \sigma^2$         |
+| \(b\) | 0               | $3.8125 \sigma^2$        |
+| \(c\) | 0               | $2.0625 \sigma^2$        |
+
+### **Ex 5.3**
+
+Consider the time series process:
+
+$$
+Y_t = e_t + c e_{t-1} + c e_{t-2} + c e_{t-3} + \dots + c e_0
+$$
+
+Where ( e_t ) is white noise with ( E(e_t) = 0 ) and ( \text{Var}(e_t) = \sigma\^2 ) for all ( t ), and ( c ) is a constant.
+
+### Part (a) - **Mean and Covariance Functions for ( {Y_t} )**
+
+#### **1. Mean of ( Y_t )**
+
+The expectation of ( Y_t ) is:
+
+$$
+E(Y_t) = E(e_t + c e_{t-1} + c e_{t-2} + \dots + c e_0)
+$$
+
+Since the error terms ( e_t ) are white noise with ( E(e_t) = 0 ), we have:
+
+$$
+E(Y_t) = 0
+$$
+
+Thus, the **mean of ( Y_t )** is:
+
+$$
+E(Y_t) = 0
+$$
+
+#### **2. Covariance Function of ( Y_t )**
+
+The covariance between ( Y_t ) and ( Y\_{t+h} ) is:
+
+$$
+\text{Cov}(Y_t, Y_{t+h}) = \text{Cov}\left( e_t + c e_{t-1} + \dots + c e_0, e_{t+h} + c e_{t+h-1} + \dots + c e_{t+h-3} \right)
+$$
+
+Since the error terms are independent, only the terms where the indices overlap contribute to the covariance. For ( h = 0 ) (the variance of ( Y_t )), we have:
+
+$$
+\text{Var}(Y_t) = \sigma^2 \left( 1 + c^2 + c^2 + \dots \right)
+$$
+
+This is a sum of an infinite geometric series:
+
+$$
+\text{Var}(Y_t) = \sigma^2 \left( 1 + c^2 \sum_{k=0}^{\infty} 1 \right)
+$$
+
+Since the sum diverges, we conclude that **( Y_t ) is not stationary** because the variance is infinite due to the infinite sum. Therefore:
+
+$$
+\text{Var}(Y_t) = \infty
+$$
+
+Thus, ( Y_t ) is **non-stationary** because its variance does not converge.
+
+------------------------------------------------------------------------
+
+### Part (b) - **Mean and Covariance Functions for ( {**\nabla Y_t} )
+
+The first difference operator is defined as:
+
+$$
+\nabla Y_t = Y_t - Y_{t-1}
+$$
+
+Substituting for ( Y_t ) and ( Y\_{t-1} ), we get:
+
+$$
+\nabla Y_t = \left( e_t + c e_{t-1} + c e_{t-2} + \dots \right) - \left( e_{t-1} + c e_{t-2} + c e_{t-3} + \dots \right)
+$$
+
+Simplifying:
+
+$$
+\nabla Y_t = e_t + c e_{t-1}
+$$
+
+#### **1. Mean of (** \nabla Y_t )
+
+Taking the expectation:
+
+$$
+E(\nabla Y_t) = E(e_t + c e_{t-1}) = 0
+$$
+
+Thus, the **mean of (** \nabla Y_t ) is:
+
+$$
+E(\nabla Y_t) = 0
+$$
+
+#### **2. Covariance Function of (** \nabla Y_t )
+
+The covariance between ( \nabla Y_t ) and ( \nabla Y\_{t+h} ) is:
+
+$$
+\text{Cov}(\nabla Y_t, \nabla Y_{t+h}) = \text{Cov}(e_t + c e_{t-1}, e_{t+h} + c e_{t+h-1})
+$$
+
+Using the independence of the error terms:
+
+$$
+\text{Var}(\nabla Y_t) = \text{Var}(e_t + c e_{t-1}) = \sigma^2 (1 + c^2)
+$$
+
+Thus, the **variance of (** \nabla Y_t ) is:
+
+$$
+\text{Var}(\nabla Y_t) = \sigma^2 (1 + c^2)
+$$
+
+Since the variance is finite, ( \nabla Y_t ) is **stationary**.
+
+------------------------------------------------------------------------
+
+### Part (c) - **Identification of ( Y_t ) as an ARIMA Process**
+
+The given process can be represented as:
+
+$$
+Y_t = e_t + c e_{t-1} + c e_{t-2} + c e_{t-3} + \dots
+$$
+
+This is a **moving average (MA)** process, as it involves a weighted sum of past error terms. Specifically, this can be represented as:
+
+$$
+Y_t = \sum_{i=0}^{\infty} c^i e_{t-i}
+$$
+
+This is an **infinite order MA process**, meaning it is an **MA(∞)** process.
+
+In terms of ARIMA, this process has:
+
+-   **AR (autoregressive) order** ( p = 0 ), since there are no autoregressive terms (no past values of ( Y_t )).
+-   **Differencing order** ( d = 0 ), as the series is not differenced.
+-   **MA (moving average) order** ( q = \infty ), because it involves an infinite number of past errors.
+
+Therefore, we can identify ( Y_t ) as an **ARIMA(0, 0, ∞)** process.
+
+------------------------------------------------------------------------
+
+## Summary
+
+| Process        | ( E(Y_t) ) | ( \text{Var}(Y_t) )      | Stationary? |
+|----------------|------------|--------------------------|-------------|
+| ( Y_t )        | 0          | ( \infty )               | No          |
+| ( \nabla Y_t ) | 0          | ( \sigma\^2 (1 + c\^2) ) | Yes         |
+| Identification | MA(∞)      | \-                       | \-          |
+
+### Ex 5.15
+
+Quarterly earnings per share for the Johnson & Johnson Company are given in the data file named JJ. The data cover the years from 1960 through 1980.
+
+a)  Display a time series plot of the data. Interpret the interesting features in the plot
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(forecast)
+library(TSA)
+library(MASS)
+```
+
+```{r}
+# Load the data
+data("JJ") # Johnson & Johnson quarterly earnings data from TSA package
+jj <- JJ
+time_index <- time(jj)
+jj
+```
+
+```{r}
+# Part (a) Display a time series plot of the data
+ggplot(data = data.frame(Time = time_index, Earnings = as.numeric(jj)), aes(x = Time, y = Earnings)) +
+  geom_line(color = "blue") +
+  ggtitle("Quarterly Earnings per Share of Johnson & Johnson (1960-1980)") +
+  xlab("Year") +
+  ylab("Earnings per Share") +
+  theme_minimal()
+```
+
+b)  Use software to produce a plot similar to Exhibit 5.11, on page 102, and determine the “best” value of λ for a power transformation of these data.
+
+```{r}
+# Part (b) Find the best value of lambda for a power transformation
+lambda <- BoxCox.lambda(jj)
+cat("Best value of lambda:", lambda, "\n")
+```
+
+```{r}
+# Plot similar to Exhibit 5.11 (Box-Cox transformation plot)
+boxcox_results <- boxcox(jj ~ time(jj), lambda = seq(-2, 2, 0.1))
+lambda_max <- boxcox_results$x[which.max(boxcox_results$y)]
+cat("Estimated lambda maximizing log-likelihood:", lambda_max, "\n")
+```
+
+c)  Display a time series plot of the transformed values. Does this plot suggest that a stationary model might be appropriate?
+
+```{r}
+# Part (c) Transform the data using the estimated lambda and plot
+jj_transformed <- BoxCox(jj, lambda)
+ggplot(data = data.frame(Time = time_index, Earnings = jj_transformed), aes(x = Time, y = Earnings)) +
+  geom_line(color = "green") +
+  ggtitle("Transformed Quarterly Earnings per Share (Box-Cox Transformation)") +
+  xlab("Year") +
+  ylab("Transformed Earnings per Share") +
+  theme_minimal()
+```
+
+d)  Display a time series plot of the differences of the transformed values. Does this plot suggest that a stationary model might be appropriate for the differences?
+
+```{r}
+# Part (d) Difference the transformed data and plot
+jj_diff <- diff(jj_transformed)
+diff_time_index <- time_index[-1]
+ggplot(data = data.frame(Time = diff_time_index, Earnings = jj_diff), aes(x = Time, y = Earnings)) +
+  geom_line(color = "red") +
+  ggtitle("Differenced Transformed Quarterly Earnings per Share") +
+  xlab("Year") +
+  ylab("Differenced Earnings per Share") +
+  theme_minimal()
+```
+
+## Ex 5.16
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(forecast)
+
+# Load the data
+data("gold") # Johnson & Johnson quarterly earnings data from TSA package
+gold <- gold
+gold
+```
+
+a\) Display the time series plot of these data. Interpret the plot.
+
+```{r}
+# Part (a): Time series plot of the gold prices
+gold_df <- data.frame(Day = time(gold), Price = as.numeric(gold))
+ggplot(gold_df, aes(x = Day, y = Price)) +
+  geom_line(color = "gold") +
+  ggtitle("Daily Price of Gold (2005)") +
+  xlab("Day") +
+  ylab("Price (in dollars per troy ounce)") +
+  theme_minimal()
+```
+
+b) Display the time series plot of the differences of the logarithms of these data.
+Interpret this plot.
+
+```{r}
+# Part (b): Differences of the logarithms of gold prices
+log_diff <- diff(log(gold))
+log_diff_df <- data.frame(Day = time(gold)[-1], LogDiff = log_diff)
+ggplot(log_diff_df, aes(x = Day, y = LogDiff)) +
+  geom_line(color = "blue") +
+  ggtitle("Differences of Logarithms of Gold Prices") +
+  xlab("Day") +
+  ylab("Log Differences") +
+  theme_minimal()
+```
+
+c) Calculate and display the sample ACF for the differences of the logarithms
+of these data and argue that the logarithms appear to follow a random walk
+model.
+
+```{r}
+# Part (c): Sample ACF for the differences of the logarithms
+acf(log_diff, main = "Sample ACF of Differences of Logarithms")
+```
+
+d) Display the differences of logs in a histogram and interpret.
+
+```{r}
+# Part (d): Histogram of the differences of logarithms
+ggplot(log_diff_df, aes(x = LogDiff)) +
+  geom_histogram(binwidth = 0.002, fill = "skyblue", color = "black") +
+  ggtitle("Histogram of Differences of Logarithms") +
+  xlab("Log Differences") +
+  ylab("Frequency") +
+  theme_minimal()
+```
+
+e) Display the differences of logs in a quantile-quantile normal plot and interpret.
+
+```{r}
+# Part (e): Quantile-Quantile (Q-Q) plot for the differences of logarithms
+qqnorm(log_diff, main = "Q-Q Plot of Differences of Logarithms")
+qqline(log_diff, col = "red")
+```
